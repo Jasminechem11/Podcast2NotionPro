@@ -1,6 +1,8 @@
 import argparse
 import json
 import os
+import re
+import emoji
 import pendulum
 from retrying import retry
 import requests
@@ -352,6 +354,9 @@ if __name__ == "__main__":
     for episode in episodes:
         episode_properties = episode.get("properties")
         title = utils.get_property_value(episode_properties.get("标题"))
+        if title not in results:
+            title = emoji.replace_emoji(title, replace='')
+            title = re.sub(r'\s+', ' ', title).strip()
         children = []
         if title in results:
             episode_page_id = episode.get("id")
